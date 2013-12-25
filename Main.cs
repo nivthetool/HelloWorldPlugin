@@ -48,7 +48,7 @@ namespace MFPlugins
                     plugin.OnRecognition(track);
                     break;
                 case "s":
-                    plugin.OnSilence(true, "ntt", "ntt", "ntt");
+                    plugin.OnSilence(true, "ntt", "ntt", "ntt",Environment.MachineName);
                     break;
                 case "f":
                     plugin.OnFingerprintChange("niv", "ntt");
