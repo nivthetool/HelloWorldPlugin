@@ -1,4 +1,8 @@
-﻿using MFLibrary;
+﻿using log4net.Appender;
+using log4net.Config;
+using log4net.Core;
+using log4net.Repository.Hierarchy;
+using MFLibrary;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -22,11 +26,29 @@ namespace MFPlugins
         */
         static void Main(string[] args)
         {
-            string config_file = "test.ini";
-            File.AppendAllText(config_file, "");
+            //NTT : let's configure log4net for coloredconsole output and debug trace
+            //var layout = new log4net.Layout.SimpleLayout();
+            //var layout = new log4net.Layout.PatternLayout("%-4timestamp [%thread] %-5level %logger %ndc - %message%newline");
+            var layout = new log4net.Layout.PatternLayout("%date %-5level %message%newline");
+            var ta = new TraceAppender { Layout = layout };
+            var ca = new ColoredConsoleAppender { Threshold = Level.All, Layout = layout };
+            var cca = new ColoredConsoleAppender { Threshold = Level.All, Layout = layout };
+            cca.AddMapping(new ColoredConsoleAppender.LevelColors { Level = Level.Debug, ForeColor = ColoredConsoleAppender.Colors.Cyan | ColoredConsoleAppender.Colors.HighIntensity });
+            cca.AddMapping(new ColoredConsoleAppender.LevelColors { Level = Level.Info, ForeColor = ColoredConsoleAppender.Colors.Green | ColoredConsoleAppender.Colors.HighIntensity });
+            cca.AddMapping(new ColoredConsoleAppender.LevelColors { Level = Level.Warn, ForeColor = ColoredConsoleAppender.Colors.Purple | ColoredConsoleAppender.Colors.HighIntensity });
+            cca.AddMapping(new ColoredConsoleAppender.LevelColors { Level = Level.Error, ForeColor = ColoredConsoleAppender.Colors.Red | ColoredConsoleAppender.Colors.HighIntensity });
+            cca.AddMapping(new ColoredConsoleAppender.LevelColors { Level = Level.Fatal, ForeColor = ColoredConsoleAppender.Colors.White | ColoredConsoleAppender.Colors.HighIntensity, BackColor = ColoredConsoleAppender.Colors.Red });
+            cca.ActivateOptions();
+            BasicConfigurator.Configure(cca);
+            Logger l = (Logger)log.Logger;
+            l.AddAppender(ta);
+
 
             HelloWorldPlugin plugin = new HelloWorldPlugin();
-
+            
+            string config_file = "test.ini";
+            File.AppendAllText(config_file, "");
+            
             plugin.Init(config_file);
 
             Track track = new Track();
