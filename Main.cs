@@ -98,6 +98,7 @@ namespace MFPlugins
         #endregion
 
         private IMFChannelPluginHost _PluginHost;
+        [Browsable(false)]
         public IMFChannelPluginHost PluginHost
         {
             get { return _PluginHost; }
