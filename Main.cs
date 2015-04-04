@@ -97,6 +97,16 @@ namespace MFPlugins
 
         #endregion
 
+        private IMFChannelPluginHost _PluginHost;
+        public IMFChannelPluginHost PluginHost
+        {
+            get { return _PluginHost; }
+            set
+            {
+                _PluginHost = value;
+                _PluginHost.Register(this);
+            }
+        }
         public string GetName()
         {
             return "Hello World Plugin";
