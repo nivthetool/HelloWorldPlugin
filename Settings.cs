@@ -11,17 +11,17 @@ using System.Reflection;
 namespace MFPlugins
 {
     public enum NTTEnum { Niv, The, Tool };
-    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class Settings
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static string _json_file_path = Path.ChangeExtension(typeof(Settings).Assembly.Location, ".config.json");
-        
+
         private static Settings _this = null;
-        
+        private static bool is_deserializing = false;
+
         [Browsable(false)]
         public static HelloWorldPlugin plugin = null;
-        
+
         private Settings()
         {
         }
@@ -33,9 +33,11 @@ namespace MFPlugins
         [JsonIgnore]
         public string Version
         {
-            get {
+            get
+            {
                 Version ver = Assembly.GetExecutingAssembly().GetName().Version;
-                return string.Format("{0}.{1}.{2} Revision {3}", ver.Major, ver.Minor, ver.Build, ver.Revision); }
+                return string.Format("{0}.{1}.{2} Revision {3}", ver.Major, ver.Minor, ver.Build, ver.Revision);
+            }
         }
         private bool _Enable = false;
         [Category("Settings")]
@@ -83,6 +85,7 @@ namespace MFPlugins
         [Category("General")]
         [DisplayName("Parameter 4")]
         [Description("parameter 4 is an object")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public MyClass Param4
         {
             get { return _Param4; }
@@ -100,7 +103,6 @@ namespace MFPlugins
             set { _Param5 = value; Save(); }
         }
 
-
         public static Settings GetInstance()
         {
             if (_this != null)
@@ -109,7 +111,9 @@ namespace MFPlugins
             log.Info("reading " + _json_file_path.ToLower());
             if (File.Exists(_json_file_path))
             {
+                is_deserializing = true;
                 _this = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(_json_file_path));
+                is_deserializing = false;
             }
             else
             {
@@ -121,8 +125,11 @@ namespace MFPlugins
         }
         public void Save()
         {
-            log.Info("writing " + _json_file_path.ToLower());
-            File.WriteAllText(_json_file_path, JsonConvert.SerializeObject(this, Formatting.Indented));
+            if (!is_deserializing)
+            {
+                log.Info("writing " + _json_file_path.ToLower());
+                File.WriteAllText(_json_file_path, JsonConvert.SerializeObject(this, Formatting.Indented));
+            }
         }
         public static void Watch()
         {
@@ -138,11 +145,12 @@ namespace MFPlugins
         private static void OnChanged(object source, FileSystemEventArgs e)
         {
             log.Info(_json_file_path + " changed (outside). reloading configuration");
+            is_deserializing = true;
             _this = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(_json_file_path));
+            is_deserializing = false;
         }
 
     }
-    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class MyClass
     {
         public string param1 { get; set; }

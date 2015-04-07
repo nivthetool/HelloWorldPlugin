@@ -4,6 +4,7 @@ using log4net.Core;
 using log4net.Repository.Hierarchy;
 using MFLibrary;
 using System;
+using System.Windows.Forms;
 
 namespace MFPlugins
 {
@@ -27,6 +28,16 @@ namespace MFPlugins
 
             plugin.Init();
 
+            Application.EnableVisualStyles();
+            Application.Run(new Form
+            {
+                Controls = { new PropertyGrid { Dock = DockStyle.Fill,
+                                            SelectedObject = plugin.Settings
+                            }
+                }
+            });
+
+            
             Track track = new Track();
             track.status = Track.TrackStatus.TRACK_LOST;
             track.time = DateTime.Now.ToString();

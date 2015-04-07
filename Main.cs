@@ -8,7 +8,7 @@ namespace MFPlugins
     public class HelloWorldPlugin : IMFChannelPlugin
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public Settings Settings = Settings.GetInstance();
+        public Settings Settings = null;
 
         private IMFChannelPluginHost _PluginHost;
         public IMFChannelPluginHost PluginHost
@@ -38,6 +38,7 @@ namespace MFPlugins
             try
             {
                 log.DebugFormat("{0} Init: ",GetName());
+                Settings = Settings.GetInstance();
                 Settings.plugin = this;
                 //DO YOUR INIT STUFF DUDE
             }
