@@ -31,13 +31,15 @@ namespace MFPlugins
             Application.EnableVisualStyles();
             Application.Run(new Form
             {
-                Controls = { new PropertyGrid { Dock = DockStyle.Fill,
-                                            SelectedObject = plugin.Settings
-                            }
+                Controls = { 
+                    new PropertyGrid { 
+                        Dock = DockStyle.Fill, 
+                        SelectedObject = plugin.Settings  
+                    }
                 }
             });
 
-            
+
             Track track = new Track();
             track.status = Track.TrackStatus.TRACK_LOST;
             track.time = DateTime.Now.ToString();

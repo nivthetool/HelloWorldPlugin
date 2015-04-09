@@ -33,11 +33,12 @@ namespace MFPlugins
             return description;
         }
         public object GetSettings() { return Settings; }
+        public void SaveSettings() { Settings.Save(); }
         public void Init()
         {
             try
             {
-                log.DebugFormat("{0} Init: ",GetName());
+                log.DebugFormat("{0} Init: ", GetName());
                 Settings = Settings.GetInstance();
                 Settings.plugin = this;
                 //DO YOUR INIT STUFF DUDE
