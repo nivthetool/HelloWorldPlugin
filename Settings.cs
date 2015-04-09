@@ -133,13 +133,9 @@ namespace MFPlugins
         }
         public static void Watch()
         {
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path = Directory.GetCurrentDirectory();
-            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName;
-            watcher.Filter = _json_file_path;
+            FileSystemWatcher watcher = new FileSystemWatcher(Path.GetDirectoryName(_json_file_path),Path.GetFileName(_json_file_path));
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.Created += new FileSystemEventHandler(OnChanged);
-            watcher.Deleted += new FileSystemEventHandler(OnChanged);
             watcher.EnableRaisingEvents = true;
         }
         private static void OnChanged(object source, FileSystemEventArgs e)
