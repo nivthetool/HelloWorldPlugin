@@ -6,7 +6,7 @@ using MFLibrary;
 using System;
 using System.Windows.Forms;
 
-namespace MFPlugins
+namespace HelloWorldPlugin
 {
     class Program
     {

@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 using System.Reflection;
 using MFLibrary;
 
-namespace MFPlugins
+namespace HelloWorldPlugin
 {
     public enum NTTEnum { Niv, The, Tool };
     public class Settings : NTTAppSettings<Settings>

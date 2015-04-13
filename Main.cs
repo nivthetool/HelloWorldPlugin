@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace MFPlugins
+namespace HelloWorldPlugin
 {
     public class HelloWorldPlugin : IMFChannelPlugin
     {
